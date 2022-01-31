@@ -3,6 +3,8 @@ package com.urlShortener.Model;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table( name = "users")
@@ -18,9 +20,16 @@ public class User {
     @NotNull
     private String email;
 
-
     @NotNull
     private String password;
+
+    @ManyToMany(fetch=FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<Role>();
 
     public User() {
     }
@@ -61,6 +70,10 @@ public class User {
 
     public String getPassword() {
         return this.password;
+    }
+
+    public void addRole(Role role){
+        this.roles.add(role);
     }
 
 }
