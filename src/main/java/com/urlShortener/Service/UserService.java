@@ -10,16 +10,23 @@ import com.urlShortener.Repository.UserRepository;
 import com.urlShortener.Service.Interface.IRoleService;
 import com.urlShortener.Service.Interface.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-public class UserService implements IUserService {
+public class UserService implements IUserService, UserDetailsService {
 
+    private String passwordEncoder(String password) {
+
+        return new BCryptPasswordEncoder().encode(password);
+    }
 
     @Autowired
     private UserRepository userRepository;
@@ -93,6 +100,8 @@ public class UserService implements IUserService {
     @Override
     public UserDTO create(User user) {
 
+        user.setPassword(passwordEncoder(user.getPassword()));
+
         Role role = iRoleService.findByName("ROLE_USER");
 
         user.addRole(role);
@@ -151,5 +160,18 @@ public class UserService implements IUserService {
         return findByIdWithRoles(id);
 
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        User user = userRepository.getByEmail(username);
+
+        if (user == null) {
+
+            return null;
+        }
+        return user;
+    }
+
 
 }
