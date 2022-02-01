@@ -35,6 +35,9 @@ public class User implements UserDetails {
     )
     private Set<Role> roles = new HashSet<Role>();
 
+    @OneToMany(mappedBy="user")
+    private Set<Url> urls;
+
     public User() {
     }
 
