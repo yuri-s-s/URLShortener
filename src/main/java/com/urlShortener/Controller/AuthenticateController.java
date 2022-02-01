@@ -1,19 +1,15 @@
 package com.urlShortener.Controller;
 
-import com.urlShortener.DTO.ErrorDTO;
 import com.urlShortener.DTO.JWTRequest;
 import com.urlShortener.DTO.JWTResponse;
 import com.urlShortener.Service.UserService;
 import com.urlShortener.Util.JWTUtility;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
