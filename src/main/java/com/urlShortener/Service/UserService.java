@@ -66,6 +66,14 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
+    public User getById(long id) {
+
+        User user = userRepository.getById(id);
+
+        return user;
+    }
+
+    @Override
     public UserRoleDTO findByIdWithRoles(long id) {
 
         User u = userRepository.getById(id);

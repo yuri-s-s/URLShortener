@@ -12,6 +12,8 @@ public interface IUserService {
 
     UserDTO findById(long id);
 
+    User getById(long id);
+
     UserRoleDTO findByIdWithRoles(long id);
 
     User findByEmail(String email);

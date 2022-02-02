@@ -1,5 +1,6 @@
 package com.urlShortener.Controller.Validation;
 
+import com.urlShortener.Exception.BaseException.BaseNotFoundException;
 import com.urlShortener.Exception.UserException.UserCreateException;
 import com.urlShortener.Model.User;
 import com.urlShortener.Service.Interface.IUserService;
@@ -33,6 +34,18 @@ public class UserValidation {
         if(u != null){
             throw new UserCreateException("Email already exists!");
         }
+
+    }
+
+    public User UserExists(long userId) throws UserCreateException {
+
+        User user = iUserService.getById(userId);
+
+        if (user == null) {
+            throw new BaseNotFoundException("User not found!");
+        }
+
+        return user;
 
     }
 }
