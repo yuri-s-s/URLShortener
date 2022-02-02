@@ -5,19 +5,25 @@ import com.urlShortener.Controller.Validation.UserValidation;
 import com.urlShortener.DTO.UrlRequestDTO;
 import com.urlShortener.DTO.UrlResponseDTO;
 import com.urlShortener.Exception.UserException.UserCreateException;
-import com.urlShortener.Model.Url;
 import com.urlShortener.Model.User;
 import com.urlShortener.Service.Interface.IUrlService;
-import org.apache.coyote.Request;
+import com.urlShortener.Util.JWTUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
 public class UrlController {
+
+    @Autowired
+    private HttpServletRequest httpServletRequest;
+
+    @Autowired
+    private JWTUtility jwtUtility;
 
     @Autowired
     private IUrlService iUrlService;
@@ -41,9 +47,15 @@ public class UrlController {
     @RequestMapping(produces = "application/json", value = "/url/user/{userId}", method = RequestMethod.POST)
     public @ResponseBody ResponseEntity<UrlResponseDTO> create(@RequestBody UrlRequestDTO url, @PathVariable long userId) throws UserCreateException {
 
-        urlValidation.validationCreate(url, userId);
+        String authorization = httpServletRequest.getHeader("Authorization");
+
+        String email = jwtUtility.getUsernameFromToken(authorization.substring(7));
 
         User user = userValidation.UserExists(userId);
+
+        userValidation.IsUserAuthenticateEmail(email, user.getEmail());
+
+        urlValidation.validationCreate(url, userId);
 
         UrlResponseDTO newUrl = iUrlService.create(url, user);
 

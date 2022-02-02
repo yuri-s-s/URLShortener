@@ -48,4 +48,14 @@ public class UserValidation {
         return user;
 
     }
+
+    public Boolean IsUserAuthenticateEmail(String authUser, String username) throws UserCreateException {
+
+        if (!authUser.equals(username)) {
+            throw new BaseNotFoundException("This token does not belong to this user");
+        }
+
+        return true;
+
+    }
 }
