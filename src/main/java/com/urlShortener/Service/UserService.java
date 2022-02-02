@@ -83,8 +83,6 @@ public class UserService implements IUserService, UserDetailsService {
             return null;
         }
 
-        ArrayList<RoleDTO> rolesDTO = new ArrayList<>();
-
         List<RoleDTO> roles = iRoleService.getRolesByUserId(u.getId());
 
         UserRoleDTO userRolesDTO = new UserRoleDTO(u.getId(), u.getName(), u.getEmail(), roles);

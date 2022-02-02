@@ -1,6 +1,7 @@
 package com.urlShortener.Controller;
 
 import com.urlShortener.DTO.UrlResponseDTO;
+import com.urlShortener.DTO.UrlStatisticsDTO;
 import com.urlShortener.Exception.BaseException.BaseNotFoundException;
 import com.urlShortener.Model.Url;
 import com.urlShortener.Service.Interface.IUrlService;
@@ -36,6 +37,19 @@ public class ShortUrlController {
         httpHeaders.setLocation(uri);
 
         return new ResponseEntity<URI>(httpHeaders, HttpStatus.SEE_OTHER);
+    }
+
+    @RequestMapping(produces = "application/json", value = "/short/{shortenedUrl}/statistics", method = RequestMethod.GET)
+    public @ResponseBody
+    ResponseEntity<UrlStatisticsDTO> statisticsByShortenedUrl(@PathVariable String shortenedUrl){
+
+        UrlStatisticsDTO url = iUrlService.statisticsByShortenedUrl(shortenedUrl);
+
+        if(url == null){
+            throw new BaseNotFoundException("Url not found!");
+        }
+
+        return new ResponseEntity<UrlStatisticsDTO>(url, HttpStatus.SEE_OTHER);
     }
 
 }

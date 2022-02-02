@@ -1,12 +1,13 @@
 package com.urlShortener.Service;
 
+import com.urlShortener.DTO.ClickDTO;
 import com.urlShortener.DTO.UrlRequestDTO;
 import com.urlShortener.DTO.UrlResponseDTO;
-import com.urlShortener.DTO.UserDTO;
+import com.urlShortener.DTO.UrlStatisticsDTO;
 import com.urlShortener.Model.Url;
 import com.urlShortener.Model.User;
 import com.urlShortener.Repository.UrlRepository;
-import com.urlShortener.Repository.UserRepository;
+import com.urlShortener.Service.Interface.IClickService;
 import com.urlShortener.Service.Interface.IUrlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +24,7 @@ public class UrlService implements IUrlService {
     private UrlRepository urlRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private IClickService iClickService;
 
     @Value("${url.short}")
     private String baseUrl;
@@ -74,9 +75,31 @@ public class UrlService implements IUrlService {
             return null;
         }
 
+        iClickService.create(url);
+
         UrlResponseDTO urlResponse = new UrlResponseDTO(url.getOriginalUrl(), baseUrl + url.getShortenedUrl());
 
         return urlResponse;
     }
+
+    @Override
+    public UrlStatisticsDTO statisticsByShortenedUrl(String shortenedUrl) {
+
+        Url url = urlRepository.findByShortenedUrl(shortenedUrl);
+
+        if (url == null){
+
+            return null;
+        }
+
+        UrlStatisticsDTO urlResponse = new UrlStatisticsDTO(url.getOriginalUrl(), baseUrl + url.getShortenedUrl());
+
+        List<ClickDTO> clicks = iClickService.getClicksByOriginalUrl(url.getId());
+
+        urlResponse.setClicks(clicks);
+
+        return urlResponse;
+    }
+
 
 }
