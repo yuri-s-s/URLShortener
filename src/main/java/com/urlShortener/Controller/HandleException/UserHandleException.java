@@ -1,6 +1,6 @@
 package com.urlShortener.Controller.HandleException;
 
-import com.urlShortener.DTO.ErrorDTO;
+import com.urlShortener.DTO.ErrorDTO.ErrorDTO;
 import com.urlShortener.Exception.UserException.UserCreateException;
 import com.urlShortener.Exception.UserException.UserRoleAlreadyExistsException;
 import org.springframework.http.HttpStatus;

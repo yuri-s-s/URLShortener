@@ -1,7 +1,6 @@
 package com.urlShortener.Unity;
 
-import com.urlShortener.DTO.UserDTO;
-import com.urlShortener.DTO.UserRoleDTO;
+import com.urlShortener.DTO.UserDTO.UserDTO;
 import com.urlShortener.Model.User;
 import com.urlShortener.Repository.RoleRepository;
 import com.urlShortener.Repository.UserRepository;
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -76,10 +76,9 @@ public class UserServiceTest {
     @Test
     public void UserTestGetAll(){
 
-        List<UserDTO> users = userService.findAll();
+        List<UserDTO> users = userService.findAll("id", "ASC");
 
         assertThat(users.size(), equalTo(4));
-
 
     }
 
@@ -109,7 +108,9 @@ public class UserServiceTest {
     @Before
     public void setup(){
 
-        when(userRepository.findAll()).thenReturn(Arrays.asList(
+        Sort s = Sort.by("id").ascending();
+
+        when(userRepository.findAll(s)).thenReturn(Arrays.asList(
                 new User("testando", "testando@email.com", new BCryptPasswordEncoder().encode("user12345")),
                 new User("testando2", "testando2@email.com", new BCryptPasswordEncoder().encode("user12345")),
                 new User("testando3", "testando3@email.com", new BCryptPasswordEncoder().encode("user12345")),

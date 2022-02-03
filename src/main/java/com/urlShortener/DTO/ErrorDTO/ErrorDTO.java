@@ -1,4 +1,4 @@
-package com.urlShortener.DTO;
+package com.urlShortener.DTO.ErrorDTO;
 
 import org.springframework.http.HttpStatus;
 

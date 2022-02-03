@@ -1,4 +1,4 @@
-package com.urlShortener.DTO;
+package com.urlShortener.DTO.UrlDTO;
 
 import org.springframework.beans.factory.annotation.Value;
 

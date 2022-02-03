@@ -1,7 +1,7 @@
 package com.urlShortener.Util;
 
 import com.google.gson.Gson;
-import com.urlShortener.DTO.ErrorDTO;
+import com.urlShortener.DTO.ErrorDTO.ErrorDTO;
 import com.urlShortener.Service.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;

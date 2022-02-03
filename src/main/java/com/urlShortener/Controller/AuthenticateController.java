@@ -1,8 +1,8 @@
 package com.urlShortener.Controller;
 
 import com.urlShortener.Config.SwaggerConfig;
-import com.urlShortener.DTO.JWTRequest;
-import com.urlShortener.DTO.JWTResponse;
+import com.urlShortener.DTO.JWTDTO.JWTRequest;
+import com.urlShortener.DTO.JWTDTO.JWTResponse;
 import com.urlShortener.Service.UserService;
 import com.urlShortener.Util.JWTUtility;
 import io.swagger.annotations.Api;

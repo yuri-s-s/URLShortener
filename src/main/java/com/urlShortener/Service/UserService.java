@@ -1,8 +1,9 @@
 package com.urlShortener.Service;
 
-import com.urlShortener.DTO.RoleDTO;
-import com.urlShortener.DTO.UserDTO;
-import com.urlShortener.DTO.UserRoleDTO;
+import com.urlShortener.DTO.RoleDTO.RoleDTO;
+import com.urlShortener.DTO.UserDTO.UserDTO;
+import com.urlShortener.DTO.UserDTO.UserEditDTO;
+import com.urlShortener.DTO.UserDTO.UserRoleDTO;
 import com.urlShortener.Exception.UserException.UserRoleAlreadyExistsException;
 import com.urlShortener.Model.Role;
 import com.urlShortener.Model.User;
@@ -10,6 +11,9 @@ import com.urlShortener.Repository.UserRepository;
 import com.urlShortener.Service.Interface.IRoleService;
 import com.urlShortener.Service.Interface.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,8 +39,34 @@ public class UserService implements IUserService, UserDetailsService {
     private IRoleService iRoleService;
 
     @Override
-    public List<UserDTO> findAll() {
-        Iterable<User> users = userRepository.findAll();
+    public List<UserDTO> findAll(String sort, String order) {
+
+        Sort s = order.equals("ASC") ? Sort.by(sort).ascending() : Sort.by(sort).descending();
+
+        Iterable<User> users = userRepository.findAll(s);
+
+        ArrayList<UserDTO> usersDTO = new ArrayList<>();
+
+        for (User u : users) {
+
+            UserDTO userDTO = new UserDTO(u.getId(), u.getName(), u.getEmail());
+
+            usersDTO.add(userDTO);
+        }
+
+        return usersDTO;
+    }
+
+    @Override
+    public List<UserDTO> findAllPaginated(int page, int pageSize, String sort, String order) {
+
+        Sort s;
+
+        s = order.equals("ASC") ? Sort.by(sort).ascending() : Sort.by(sort).descending();
+
+        Pageable pageable = PageRequest.of(page - 1, pageSize, s);
+
+        Iterable<User> users = userRepository.findAllPaginated(pageable);
 
         ArrayList<UserDTO> usersDTO = new ArrayList<>();
 
@@ -61,6 +91,24 @@ public class UserService implements IUserService, UserDetailsService {
         }
 
         UserDTO userDTO = new UserDTO(u.getId(), u.getName(), u.getEmail());
+
+        return userDTO;
+    }
+
+    @Override
+    public UserDTO update(long id, UserEditDTO userEditDTO) {
+        User user = userRepository.getById(id);
+
+        if (user == null) {
+            return null;
+        }
+
+        if (userEditDTO.getName() != null) {
+            user.setName(userEditDTO.getName());
+        }
+        userRepository.save(user);
+
+        UserDTO userDTO = new UserDTO(user.getId(), user.getName(), user.getEmail());
 
         return userDTO;
     }
@@ -152,7 +200,7 @@ public class UserService implements IUserService, UserDetailsService {
                 .map(s -> Integer.valueOf(s.getId()))
                 .filter(s -> s == role.getId()).findFirst();
 
-        if(!check.isEmpty()) {
+        if (!check.isEmpty()) {
 
             throw new UserRoleAlreadyExistsException("Role already exists in this user!");
         }

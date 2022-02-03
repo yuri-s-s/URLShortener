@@ -1,4 +1,4 @@
-package com.urlShortener.DTO;
+package com.urlShortener.DTO.ClickDTO;
 
 import java.util.Date;
 

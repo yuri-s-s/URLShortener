@@ -1,6 +1,11 @@
-package com.urlShortener.DTO;
+package com.urlShortener.DTO.UserDTO;
 
-public class UserDTO {
+import com.urlShortener.DTO.RoleDTO.RoleDTO;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class UserRoleDTO {
 
     private Long id;
 
@@ -8,14 +13,16 @@ public class UserDTO {
 
     private String email;
 
+    private List<RoleDTO> roles = new ArrayList<>();
 
-    public UserDTO(Long id, String name, String email) {
+    public UserRoleDTO(Long id, String name, String email, List<RoleDTO> roles) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.roles = roles;
     }
 
-    public UserDTO() {
+    public UserRoleDTO() {
 
     }
 
@@ -43,12 +50,12 @@ public class UserDTO {
         this.name = name;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserDTO userDTO = (UserDTO) o;
-        return getId().equals(userDTO.getId()) && getName().equals(userDTO.getName()) && getEmail().equals(userDTO.getEmail());
+    public void addRoles(List<RoleDTO> roles){
+        this.roles = roles;
+    }
+
+    public List<RoleDTO> getRoles(){
+        return this.roles;
     }
 
 }

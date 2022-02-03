@@ -1,7 +1,6 @@
 package com.urlShortener.Service;
 
-import com.urlShortener.DTO.ClickDTO;
-import com.urlShortener.DTO.UrlResponseDTO;
+import com.urlShortener.DTO.ClickDTO.ClickDTO;
 import com.urlShortener.Model.Click;
 import com.urlShortener.Model.Url;
 import com.urlShortener.Repository.ClickRepository;
@@ -9,7 +8,6 @@ import com.urlShortener.Service.Interface.IClickService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 

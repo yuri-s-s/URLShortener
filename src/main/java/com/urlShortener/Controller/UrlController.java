@@ -3,8 +3,9 @@ package com.urlShortener.Controller;
 import com.urlShortener.Config.SwaggerConfig;
 import com.urlShortener.Controller.Validation.UrlValidation;
 import com.urlShortener.Controller.Validation.UserValidation;
-import com.urlShortener.DTO.UrlRequestDTO;
-import com.urlShortener.DTO.UrlResponseDTO;
+import com.urlShortener.DTO.UrlDTO.UrlPaginationDTO;
+import com.urlShortener.DTO.UrlDTO.UrlRequestDTO;
+import com.urlShortener.DTO.UrlDTO.UrlResponseDTO;
 import com.urlShortener.Exception.UserException.UserCreateException;
 import com.urlShortener.Model.User;
 import com.urlShortener.Service.Interface.IUrlService;
@@ -40,11 +41,27 @@ public class UrlController {
 
     @ApiOperation(value = "This method returns a list of urls")
     @RequestMapping(produces = "application/json", value = "/url", method = RequestMethod.GET)
-    public @ResponseBody ResponseEntity<List<UrlResponseDTO>> getAll(){
+    public @ResponseBody ResponseEntity<UrlPaginationDTO> getAll(@RequestParam(required = false) String page, @RequestParam(required = false) String pageSize, @RequestParam(required = false) String sort, @RequestParam(required = false) String order){
 
-        List<UrlResponseDTO> urls = iUrlService.findAll();
+        List<UrlResponseDTO> urls;
 
-        return new ResponseEntity<List<UrlResponseDTO>>(urls, HttpStatus.OK);
+        String newSort = sort == null ? "id" : sort;
+        String newOrder = order == null ? "ASC" : order;
+
+        Integer newPage = page != null ? Integer.valueOf(page) : null;
+        Integer newPageSize = page != null ? Integer.valueOf(pageSize) : null;
+
+        if (page != null && pageSize != null) {
+
+            urls = iUrlService.findAllPaginated(newPage, newPageSize, newSort, newOrder);
+
+        } else {
+            urls = iUrlService.findAll(newSort, newOrder);
+        }
+
+        UrlPaginationDTO urlPaginationDTO = new UrlPaginationDTO(newPage, newPageSize, urls);
+
+        return new ResponseEntity<UrlPaginationDTO>(urlPaginationDTO, HttpStatus.OK);
 
     }
 
