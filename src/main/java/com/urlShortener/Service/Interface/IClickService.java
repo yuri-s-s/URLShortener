@@ -1,6 +1,6 @@
 package com.urlShortener.Service.Interface;
 
-import com.urlShortener.DTO.ClickDTO;
+import com.urlShortener.DTO.ClickDTO.ClickDTO;
 import com.urlShortener.Model.Click;
 import com.urlShortener.Model.Url;
 

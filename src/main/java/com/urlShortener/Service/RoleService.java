@@ -1,6 +1,6 @@
 package com.urlShortener.Service;
 
-import com.urlShortener.DTO.RoleDTO;
+import com.urlShortener.DTO.RoleDTO.RoleDTO;
 import com.urlShortener.Model.Role;
 import com.urlShortener.Repository.RoleRepository;
 import com.urlShortener.Service.Interface.IRoleService;

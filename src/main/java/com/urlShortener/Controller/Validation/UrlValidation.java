@@ -1,6 +1,6 @@
 package com.urlShortener.Controller.Validation;
 
-import com.urlShortener.DTO.UrlRequestDTO;
+import com.urlShortener.DTO.UrlDTO.UrlRequestDTO;
 import com.urlShortener.Exception.UserException.UserCreateException;
 import com.urlShortener.Model.Url;
 import com.urlShortener.Service.Interface.IUrlService;

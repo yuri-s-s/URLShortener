@@ -2,7 +2,7 @@ package com.urlShortener.Controller;
 
 import com.urlShortener.Config.SwaggerConfig;
 import com.urlShortener.Controller.Validation.RoleValidation;
-import com.urlShortener.DTO.RoleDTO;
+import com.urlShortener.DTO.RoleDTO.RoleDTO;
 import com.urlShortener.Exception.BaseException.BaseNotFoundException;
 import com.urlShortener.Exception.RoleException.RoleCreateException;
 import com.urlShortener.Model.Role;

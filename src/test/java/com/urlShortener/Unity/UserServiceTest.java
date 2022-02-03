@@ -1,7 +1,6 @@
 package com.urlShortener.Unity;
 
-import com.urlShortener.DTO.UserDTO;
-import com.urlShortener.DTO.UserRoleDTO;
+import com.urlShortener.DTO.UserDTO.UserDTO;
 import com.urlShortener.Model.User;
 import com.urlShortener.Repository.RoleRepository;
 import com.urlShortener.Repository.UserRepository;
@@ -76,7 +75,7 @@ public class UserServiceTest {
     @Test
     public void UserTestGetAll(){
 
-        List<UserDTO> users = userService.findAll();
+        List<UserDTO> users = userService.findAll("id", "ASC");
 
         assertThat(users.size(), equalTo(4));
 

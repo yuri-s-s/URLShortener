@@ -1,9 +1,9 @@
 package com.urlShortener.Service;
 
-import com.urlShortener.DTO.ClickDTO;
-import com.urlShortener.DTO.UrlRequestDTO;
-import com.urlShortener.DTO.UrlResponseDTO;
-import com.urlShortener.DTO.UrlStatisticsDTO;
+import com.urlShortener.DTO.ClickDTO.ClickDTO;
+import com.urlShortener.DTO.UrlDTO.UrlRequestDTO;
+import com.urlShortener.DTO.UrlDTO.UrlResponseDTO;
+import com.urlShortener.DTO.UrlDTO.UrlStatisticsDTO;
 import com.urlShortener.Model.Url;
 import com.urlShortener.Model.User;
 import com.urlShortener.Repository.UrlRepository;

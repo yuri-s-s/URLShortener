@@ -1,8 +1,8 @@
 package com.urlShortener.Controller;
 
 import com.urlShortener.Config.SwaggerConfig;
-import com.urlShortener.DTO.UrlResponseDTO;
-import com.urlShortener.DTO.UrlStatisticsDTO;
+import com.urlShortener.DTO.UrlDTO.UrlResponseDTO;
+import com.urlShortener.DTO.UrlDTO.UrlStatisticsDTO;
 import com.urlShortener.Exception.BaseException.BaseNotFoundException;
 import com.urlShortener.Service.Interface.IUrlService;
 import io.swagger.annotations.Api;

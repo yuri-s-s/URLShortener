@@ -1,6 +1,6 @@
 package com.urlShortener.Controller.HandleException;
 
-import com.urlShortener.DTO.ErrorDTO;
+import com.urlShortener.DTO.ErrorDTO.ErrorDTO;
 import com.urlShortener.Exception.RoleException.RoleCreateException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

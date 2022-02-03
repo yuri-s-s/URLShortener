@@ -1,4 +1,6 @@
-package com.urlShortener.DTO;
+package com.urlShortener.DTO.UrlDTO;
+
+import com.urlShortener.DTO.ClickDTO.ClickDTO;
 
 import java.util.ArrayList;
 import java.util.List;

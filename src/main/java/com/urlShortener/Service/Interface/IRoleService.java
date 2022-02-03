@@ -1,6 +1,6 @@
 package com.urlShortener.Service.Interface;
 
-import com.urlShortener.DTO.RoleDTO;
+import com.urlShortener.DTO.RoleDTO.RoleDTO;
 import com.urlShortener.Model.Role;
 
 import java.util.List;

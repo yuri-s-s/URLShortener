@@ -3,8 +3,9 @@ package com.urlShortener.Controller;
 import com.urlShortener.Config.SwaggerConfig;
 import com.urlShortener.Controller.Validation.RoleValidation;
 import com.urlShortener.Controller.Validation.UserValidation;
-import com.urlShortener.DTO.UserDTO;
-import com.urlShortener.DTO.UserRoleDTO;
+import com.urlShortener.DTO.UserDTO.UserDTO;
+import com.urlShortener.DTO.UserDTO.UserPaginationDTO;
+import com.urlShortener.DTO.UserDTO.UserRoleDTO;
 import com.urlShortener.Exception.BaseException.BaseNotFoundException;
 import com.urlShortener.Exception.UserException.UserCreateException;
 import com.urlShortener.Model.User;
@@ -34,13 +35,27 @@ public class UserController {
     @ApiOperation(value = "This method returns a list of users")
     @RequestMapping(produces = "application/json", value = "/user", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<List<UserDTO>> getAll() {
+    ResponseEntity<UserPaginationDTO> getAll(@RequestParam(required = false) String page, @RequestParam(required = false) String pageSize, @RequestParam(required = false) String sort, @RequestParam(required = false) String order) {
 
+        List<UserDTO> users;
 
-        List<UserDTO> users = iUserService.findAll();
+        String newSort = sort == null ? "id" : sort;
+        String newOrder = order == null ? "ASC" : order;
 
+        Integer newPage = page != null ? Integer.valueOf(page) : null;
+        Integer newPageSize = page != null ? Integer.valueOf(pageSize) : null;
 
-        return new ResponseEntity<List<UserDTO>>(users, HttpStatus.OK);
+        if (page != null && pageSize != null) {
+
+            users = iUserService.findAllPaginated(newPage, newPageSize, newSort, newOrder);
+
+        } else {
+            users = iUserService.findAll(newSort, newOrder);
+        }
+
+        UserPaginationDTO userPaginationDTO = new UserPaginationDTO(newPage, newPageSize, users);
+
+        return new ResponseEntity<UserPaginationDTO>(userPaginationDTO, HttpStatus.OK);
 
     }
 
