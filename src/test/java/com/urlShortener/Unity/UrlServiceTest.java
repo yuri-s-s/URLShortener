@@ -76,7 +76,7 @@ public class UrlServiceTest {
     @Test
     public void UserTestGetAll(){
 
-        List<UrlResponseDTO> urls = urlService.findAll();
+        List<UrlResponseDTO> urls = urlService.findAll("id", "ASC");
 
         assertThat(urls.size(), equalTo(2));
 

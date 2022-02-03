@@ -4,6 +4,7 @@ import com.urlShortener.Config.SwaggerConfig;
 import com.urlShortener.Controller.Validation.RoleValidation;
 import com.urlShortener.Controller.Validation.UserValidation;
 import com.urlShortener.DTO.UserDTO.UserDTO;
+import com.urlShortener.DTO.UserDTO.UserEditDTO;
 import com.urlShortener.DTO.UserDTO.UserPaginationDTO;
 import com.urlShortener.DTO.UserDTO.UserRoleDTO;
 import com.urlShortener.Exception.BaseException.BaseNotFoundException;
@@ -101,6 +102,24 @@ public class UserController {
         userValidation.validationCreate(user);
 
         UserDTO newUser = iUserService.create(user);
+
+        return new ResponseEntity<UserDTO>(newUser, HttpStatus.CREATED);
+
+    }
+
+    @ApiOperation(value = "This method updates a user")
+    @RequestMapping(produces = "application/json", value = "/user/{id}", method = RequestMethod.PUT)
+    public @ResponseBody
+    ResponseEntity<UserDTO> update(@PathVariable long id, @RequestBody UserEditDTO user) throws UserCreateException {
+
+        userValidation.validationEdit(user);
+
+        UserDTO newUser = iUserService.update(id, user);
+
+        if (newUser == null){
+
+            throw new BaseNotFoundException("User not found!");
+        }
 
         return new ResponseEntity<UserDTO>(newUser, HttpStatus.CREATED);
 

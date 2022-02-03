@@ -2,6 +2,7 @@ package com.urlShortener.Service;
 
 import com.urlShortener.DTO.RoleDTO.RoleDTO;
 import com.urlShortener.DTO.UserDTO.UserDTO;
+import com.urlShortener.DTO.UserDTO.UserEditDTO;
 import com.urlShortener.DTO.UserDTO.UserRoleDTO;
 import com.urlShortener.Exception.UserException.UserRoleAlreadyExistsException;
 import com.urlShortener.Model.Role;
@@ -95,6 +96,24 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
+    public UserDTO update(long id, UserEditDTO userEditDTO) {
+        User user = userRepository.getById(id);
+
+        if (user == null) {
+            return null;
+        }
+
+        if (userEditDTO.getName() != null) {
+            user.setName(userEditDTO.getName());
+        }
+        userRepository.save(user);
+
+        UserDTO userDTO = new UserDTO(user.getId(), user.getName(), user.getEmail());
+
+        return userDTO;
+    }
+
+    @Override
     public User getById(long id) {
 
         User user = userRepository.getById(id);
@@ -181,7 +200,7 @@ public class UserService implements IUserService, UserDetailsService {
                 .map(s -> Integer.valueOf(s.getId()))
                 .filter(s -> s == role.getId()).findFirst();
 
-        if(!check.isEmpty()) {
+        if (!check.isEmpty()) {
 
             throw new UserRoleAlreadyExistsException("Role already exists in this user!");
         }

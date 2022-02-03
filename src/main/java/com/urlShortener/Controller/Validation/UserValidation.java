@@ -1,5 +1,6 @@
 package com.urlShortener.Controller.Validation;
 
+import com.urlShortener.DTO.UserDTO.UserEditDTO;
 import com.urlShortener.Exception.BaseException.BaseNotFoundException;
 import com.urlShortener.Exception.UserException.UserCreateException;
 import com.urlShortener.Model.User;
@@ -19,9 +20,9 @@ public class UserValidation {
         String email = user.getEmail();
         String password = user.getPassword();
 
-        if (userName == null) {
+        if (userName == null || userName.trim().length() == 0) {
             throw new UserCreateException("UserName is required!");
-        } else if (email == null) {
+        } else if (email == null || userName.trim().length() == 0) {
             throw new UserCreateException("Email is required!");
         } else if (password == null) {
             throw new UserCreateException("Password is required!");
@@ -33,6 +34,16 @@ public class UserValidation {
 
         if(u != null){
             throw new UserCreateException("Email already exists!");
+        }
+
+    }
+
+    public void validationEdit(UserEditDTO user) throws UserCreateException {
+
+        String userName = user.getName();
+
+        if (userName != null && userName.trim().length() == 0) {
+            throw new UserCreateException("UserName is required!");
         }
 
     }
