@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -76,7 +77,7 @@ public class UrlServiceTest {
     @Test
     public void UserTestGetAll(){
 
-        List<UrlResponseDTO> urls = urlService.findAll("id", "ASC");
+        List<UrlResponseDTO> urls = urlService.findAll("id", "DESC");
 
         assertThat(urls.size(), equalTo(2));
 
@@ -86,9 +87,12 @@ public class UrlServiceTest {
     @Before
     public void setup(){
 
-        when(urlRepository.findAll()).thenReturn(Arrays.asList(
+        Sort s = Sort.by("id").descending();
+
+        when(urlRepository.findAll(s)).thenReturn(Arrays.asList(
                 new Url("testando.com.br", "testando.com.br"),
                 new Url("testando2.com.br", "testando2.com.br")
                 ));
+
     }
 }
