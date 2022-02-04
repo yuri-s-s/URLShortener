@@ -2,12 +2,16 @@ package com.urlShortener.Controller;
 
 import com.urlShortener.Config.SwaggerConfig;
 import com.urlShortener.DTO.JWTDTO.JWTRequest;
-import com.urlShortener.DTO.JWTDTO.JWTResponse;
+import com.urlShortener.DTO.UserDTO.UserAuthenticateDTO;
+import com.urlShortener.Model.User;
+import com.urlShortener.Service.Interface.IUserService;
 import com.urlShortener.Service.UserService;
 import com.urlShortener.Util.JWTUtility;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +28,8 @@ public class AuthenticateController {
     @Autowired
     private JWTUtility jwtUtility;
 
+    @Autowired
+    private IUserService iUserService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -34,7 +40,7 @@ public class AuthenticateController {
 
     @ApiOperation(value = "This method authenticates a user")
     @PostMapping("/authenticate")
-    public JWTResponse authenticate(@RequestBody JWTRequest jwtRequest) throws Exception {
+    public ResponseEntity<UserAuthenticateDTO> authenticate(@RequestBody JWTRequest jwtRequest) throws Exception {
 
         try {
             authenticationManager.authenticate(
@@ -48,14 +54,17 @@ public class AuthenticateController {
             throw new UsernameNotFoundException(e.getMessage());
         }
 
+        User user = iUserService.findByEmail(jwtRequest.getEmail());
+
         final UserDetails userDetails
                 = userService.loadUserByUsername(jwtRequest.getEmail());
 
         final String token =
                 jwtUtility.generateToken(userDetails);
 
-        return new JWTResponse(token);
+        UserAuthenticateDTO userAuthenticateDTO = new UserAuthenticateDTO(user.getId(), user.getName(), user.getEmail(), token);
+
+        return new ResponseEntity<UserAuthenticateDTO>(userAuthenticateDTO, HttpStatus.CREATED);
     }
-
-
+    
 }

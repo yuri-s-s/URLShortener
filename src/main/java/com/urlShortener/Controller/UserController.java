@@ -3,19 +3,19 @@ package com.urlShortener.Controller;
 import com.urlShortener.Config.SwaggerConfig;
 import com.urlShortener.Controller.Validation.RoleValidation;
 import com.urlShortener.Controller.Validation.UserValidation;
-import com.urlShortener.DTO.UserDTO.UserDTO;
-import com.urlShortener.DTO.UserDTO.UserEditDTO;
-import com.urlShortener.DTO.UserDTO.UserPaginationDTO;
-import com.urlShortener.DTO.UserDTO.UserRoleDTO;
+import com.urlShortener.DTO.UserDTO.*;
 import com.urlShortener.Exception.BaseException.BaseNotFoundException;
 import com.urlShortener.Exception.UserException.UserCreateException;
 import com.urlShortener.Model.User;
 import com.urlShortener.Service.Interface.IUserService;
+import com.urlShortener.Service.UserService;
+import com.urlShortener.Util.JWTUtility;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +32,12 @@ public class UserController {
 
     @Autowired
     private RoleValidation roleValidation;
+
+    @Autowired
+    private JWTUtility jwtUtility;
+
+    @Autowired
+    private UserService userService;
 
     @ApiOperation(value = "This method returns a list of users")
     @RequestMapping(produces = "application/json", value = "/user", method = RequestMethod.GET)
@@ -97,14 +103,21 @@ public class UserController {
     @ApiOperation(value = "This method creates a new user")
     @RequestMapping(produces = "application/json", value = "/user", method = RequestMethod.POST)
     public @ResponseBody
-    ResponseEntity<UserDTO> create(@RequestBody User user) throws UserCreateException {
+    ResponseEntity<UserAuthenticateDTO> create(@RequestBody User user) throws UserCreateException {
 
         userValidation.validationCreate(user);
 
         UserDTO newUser = iUserService.create(user);
 
-        return new ResponseEntity<UserDTO>(newUser, HttpStatus.CREATED);
+        UserDetails userDetails
+                = userService.loadUserByUsername(newUser.getEmail());
 
+        String token =
+                jwtUtility.generateToken(userDetails);
+
+        UserAuthenticateDTO userAuthenticateDTO = new UserAuthenticateDTO(newUser.getId(), newUser.getName(), newUser.getEmail(), token);
+
+        return new ResponseEntity<UserAuthenticateDTO>(userAuthenticateDTO, HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "This method updates a user")
