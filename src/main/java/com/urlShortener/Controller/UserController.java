@@ -10,6 +10,7 @@ import com.urlShortener.Model.User;
 import com.urlShortener.Service.Interface.IUserService;
 import com.urlShortener.Service.UserService;
 import com.urlShortener.Util.JWTUtility;
+import com.urlShortener.Util.Utilities;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class UserController {
 
     @Autowired
     private JWTUtility jwtUtility;
+
+    @Autowired
+    private Utilities utilities;
 
     @Autowired
     private UserService userService;
@@ -107,7 +111,7 @@ public class UserController {
 
         userValidation.validationCreate(user);
 
-        UserDTO newUser = iUserService.create(user);
+        UserRoleDTO newUser = iUserService.create(user);
 
         UserDetails userDetails
                 = userService.loadUserByUsername(newUser.getEmail());
@@ -115,7 +119,9 @@ public class UserController {
         String token =
                 jwtUtility.generateToken(userDetails);
 
-        UserAuthenticateDTO userAuthenticateDTO = new UserAuthenticateDTO(newUser.getId(), newUser.getName(), newUser.getEmail(), token);
+        List<String> roles = utilities.rolesToString(newUser.getRoles());
+
+        UserAuthenticateDTO userAuthenticateDTO = new UserAuthenticateDTO(newUser.getId(), newUser.getName(), newUser.getEmail(), token, roles);
 
         return new ResponseEntity<UserAuthenticateDTO>(userAuthenticateDTO, HttpStatus.CREATED);
     }

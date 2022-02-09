@@ -1,6 +1,7 @@
 package com.urlShortener.Controller.Validation;
 
 import com.urlShortener.DTO.UserDTO.UserEditDTO;
+import com.urlShortener.DTO.UserDTO.UserRoleDTO;
 import com.urlShortener.Exception.BaseException.BaseNotFoundException;
 import com.urlShortener.Exception.UserException.UserCreateException;
 import com.urlShortener.Model.User;
@@ -30,7 +31,7 @@ public class UserValidation {
             throw new UserCreateException("Password must contain more than 8 characters!");
         }
 
-        User u = iUserService.findByEmail(email);
+        UserRoleDTO u = iUserService.findByEmail(email);
 
         if(u != null){
             throw new UserCreateException("Email already exists!");

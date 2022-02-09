@@ -3,10 +3,11 @@ package com.urlShortener.Controller;
 import com.urlShortener.Config.SwaggerConfig;
 import com.urlShortener.DTO.JWTDTO.JWTRequest;
 import com.urlShortener.DTO.UserDTO.UserAuthenticateDTO;
-import com.urlShortener.Model.User;
+import com.urlShortener.DTO.UserDTO.UserRoleDTO;
 import com.urlShortener.Service.Interface.IUserService;
 import com.urlShortener.Service.UserService;
 import com.urlShortener.Util.JWTUtility;
+import com.urlShortener.Util.Utilities;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @Api(tags = {SwaggerConfig.TAG_5})
 @RestController
 public class AuthenticateController {
+
+    @Autowired
+    private Utilities utilities;
 
     @Autowired
     private JWTUtility jwtUtility;
@@ -54,7 +60,7 @@ public class AuthenticateController {
             throw new UsernameNotFoundException(e.getMessage());
         }
 
-        User user = iUserService.findByEmail(jwtRequest.getEmail());
+        UserRoleDTO user = iUserService.findByEmail(jwtRequest.getEmail());
 
         final UserDetails userDetails
                 = userService.loadUserByUsername(jwtRequest.getEmail());
@@ -62,7 +68,9 @@ public class AuthenticateController {
         final String token =
                 jwtUtility.generateToken(userDetails);
 
-        UserAuthenticateDTO userAuthenticateDTO = new UserAuthenticateDTO(user.getId(), user.getName(), user.getEmail(), token);
+        List<String> roles = utilities.rolesToString(user.getRoles());
+
+        UserAuthenticateDTO userAuthenticateDTO = new UserAuthenticateDTO(user.getId(), user.getName(), user.getEmail(), token, roles);
 
         return new ResponseEntity<UserAuthenticateDTO>(userAuthenticateDTO, HttpStatus.CREATED);
     }

@@ -21,9 +21,9 @@ public interface IUserService {
 
     UserRoleDTO findByIdWithRoles(long id);
 
-    User findByEmail(String email);
+    UserRoleDTO findByEmail(String email);
 
-    UserDTO create(User user);
+    UserRoleDTO create(User user);
 
     UserDTO remove (long id);
 

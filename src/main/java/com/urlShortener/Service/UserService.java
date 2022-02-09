@@ -139,7 +139,7 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
-    public User findByEmail(String email) {
+    public UserRoleDTO findByEmail(String email) {
 
         User u = userRepository.getByEmail(email);
 
@@ -148,11 +148,15 @@ public class UserService implements IUserService, UserDetailsService {
             return null;
         }
 
-        return u;
+        List<RoleDTO> roles = iRoleService.getRolesByUserId(u.getId());
+
+        UserRoleDTO userRolesDTO = new UserRoleDTO(u.getId(), u.getName(), u.getEmail(), roles);
+
+        return userRolesDTO;
     }
 
     @Override
-    public UserDTO create(User user) {
+    public UserRoleDTO create(User user) {
 
         user.setPassword(passwordEncoder(user.getPassword()));
 
@@ -162,9 +166,11 @@ public class UserService implements IUserService, UserDetailsService {
 
         userRepository.save(user);
 
-        UserDTO userDTO = new UserDTO(user.getId(), user.getName(), user.getEmail());
+        List<RoleDTO> roles = iRoleService.getRolesByUserId(user.getId());
 
-        return userDTO;
+        UserRoleDTO userRolesDTO = new UserRoleDTO(user.getId(), user.getName(), user.getEmail(), roles);
+
+        return userRolesDTO;
     }
 
     @Override

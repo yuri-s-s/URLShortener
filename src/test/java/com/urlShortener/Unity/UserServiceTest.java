@@ -1,6 +1,7 @@
 package com.urlShortener.Unity;
 
 import com.urlShortener.DTO.UserDTO.UserDTO;
+import com.urlShortener.DTO.UserDTO.UserRoleDTO;
 import com.urlShortener.Model.User;
 import com.urlShortener.Repository.RoleRepository;
 import com.urlShortener.Repository.UserRepository;
@@ -65,7 +66,7 @@ public class UserServiceTest {
         when(userRepository.getById(newUser.getId()))
                 .thenReturn(newUser);
 
-        UserDTO user = userService.create(newUser);
+        UserRoleDTO user = userService.create(newUser);
 
         UserDTO userDTO = userService.findById(user.getId());
 

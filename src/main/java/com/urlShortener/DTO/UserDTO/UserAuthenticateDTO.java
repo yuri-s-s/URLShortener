@@ -1,5 +1,10 @@
 package com.urlShortener.DTO.UserDTO;
 
+import com.urlShortener.DTO.RoleDTO.RoleDTO;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserAuthenticateDTO {
 
     private Long id;
@@ -10,12 +15,14 @@ public class UserAuthenticateDTO {
 
     private String token;
 
+    private List<String> roles = new ArrayList<>();
 
-    public UserAuthenticateDTO(Long id, String name, String email, String token) {
+    public UserAuthenticateDTO(Long id, String name, String email, String token, List<String> roles) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.token = token;
+        this.roles = roles;
     }
 
     public UserAuthenticateDTO() {
@@ -52,5 +59,13 @@ public class UserAuthenticateDTO {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 }
