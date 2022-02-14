@@ -75,6 +75,48 @@ public class UrlService implements IUrlService {
     }
 
     @Override
+    public List<UrlResponseDTO> findAllByUser(long userId, String sort, String order) {
+
+        Sort s = order.equals("ASC") ? Sort.by(sort).ascending() : Sort.by(sort).descending();
+
+        List<Url> urls = urlRepository.findAllByUser(userId, s);
+
+        ArrayList<UrlResponseDTO> urlsDTO = new ArrayList<>();
+
+        for (Url u : urls) {
+
+            UrlResponseDTO urlDto = new UrlResponseDTO(u.getOriginalUrl(), baseUrl + u.getShortenedUrl());
+
+            urlsDTO.add(urlDto);
+        }
+
+        return urlsDTO;
+    }
+
+    @Override
+    public List<UrlResponseDTO> findAllPaginatedByUser(long userId, int page, int pageSize, String sort, String order) {
+
+        Sort s;
+
+        s = order.equals("ASC") ? Sort.by(sort).ascending() : Sort.by(sort).descending();
+
+        Pageable pageable = PageRequest.of(page - 1, pageSize, s);
+
+        List<Url> urls = urlRepository.findAllPaginatedByUser(userId, pageable);
+
+        ArrayList<UrlResponseDTO> urlsDTO = new ArrayList<>();
+
+        for (Url u : urls) {
+
+            UrlResponseDTO urlDto = new UrlResponseDTO(u.getOriginalUrl(), baseUrl + u.getShortenedUrl());
+
+            urlsDTO.add(urlDto);
+        }
+
+        return urlsDTO;
+    }
+
+    @Override
     public UrlResponseDTO create(UrlRequestDTO url, User user) {
 
         String date = Long.toString(new Date().getTime());

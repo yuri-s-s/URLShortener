@@ -65,6 +65,33 @@ public class UrlController {
 
     }
 
+    @ApiOperation(value = "This method returns a list of urls")
+    @RequestMapping(produces = "application/json", value = "/url/user/{userId}", method = RequestMethod.GET)
+    public @ResponseBody ResponseEntity<UrlPaginationDTO> getAllByUser(@PathVariable long userId, @RequestParam(required = false) String page, @RequestParam(required = false) String pageSize, @RequestParam(required = false) String sort, @RequestParam(required = false) String order){
+
+        List<UrlResponseDTO> urls;
+
+        String newSort = sort == null ? "id" : sort;
+        String newOrder = order == null ? "ASC" : order;
+
+        Integer newPage = page != null ? Integer.valueOf(page) : null;
+        Integer newPageSize = page != null ? Integer.valueOf(pageSize) : null;
+
+        if (page != null && pageSize != null) {
+
+            urls = iUrlService.findAllPaginatedByUser(userId, newPage, newPageSize, newSort, newOrder);
+
+        } else {
+            urls = iUrlService.findAllByUser(userId, newSort, newOrder);
+        }
+
+        UrlPaginationDTO urlPaginationDTO = new UrlPaginationDTO(newPage, newPageSize, urls);
+
+        return new ResponseEntity<UrlPaginationDTO>(urlPaginationDTO, HttpStatus.OK);
+
+    }
+
+
     @ApiOperation(value = "This method creates a new url")
     @RequestMapping(produces = "application/json", value = "/url/user/{userId}", method = RequestMethod.POST)
     public @ResponseBody ResponseEntity<UrlResponseDTO> create(@RequestBody UrlRequestDTO url, @PathVariable long userId) throws UserCreateException {
