@@ -12,9 +12,13 @@ public interface IUrlService {
 
     List<UrlResponseDTO> findAll(String sort, String order);
 
+    long countAll();
+
     List<UrlResponseDTO> findAllPaginated(int page, int pageSize, String sort, String order);
 
     List<UrlResponseDTO> findAllByUser(long userId, String sort, String order);
+
+    long countAllByUser(long userId);
 
     List<UrlResponseDTO> findAllPaginatedByUser(long user, int page, int pageSize, String sort, String order);
 

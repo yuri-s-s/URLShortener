@@ -51,15 +51,18 @@ public class UrlController {
         Integer newPage = page != null ? Integer.valueOf(page) : null;
         Integer newPageSize = page != null ? Integer.valueOf(pageSize) : null;
 
+        long count;
+
         if (page != null && pageSize != null) {
 
             urls = iUrlService.findAllPaginated(newPage, newPageSize, newSort, newOrder);
-
+            count = iUrlService.countAll();
         } else {
             urls = iUrlService.findAll(newSort, newOrder);
+            count = urls.size();
         }
 
-        UrlPaginationDTO urlPaginationDTO = new UrlPaginationDTO(newPage, newPageSize, urls);
+        UrlPaginationDTO urlPaginationDTO = new UrlPaginationDTO(newPage, newPageSize, urls, count);
 
         return new ResponseEntity<UrlPaginationDTO>(urlPaginationDTO, HttpStatus.OK);
 
@@ -77,15 +80,18 @@ public class UrlController {
         Integer newPage = page != null ? Integer.valueOf(page) : null;
         Integer newPageSize = page != null ? Integer.valueOf(pageSize) : null;
 
+        long count;
+
         if (page != null && pageSize != null) {
 
             urls = iUrlService.findAllPaginatedByUser(userId, newPage, newPageSize, newSort, newOrder);
-
+            count = iUrlService.countAllByUser(userId);
         } else {
             urls = iUrlService.findAllByUser(userId, newSort, newOrder);
+            count = urls.size();
         }
 
-        UrlPaginationDTO urlPaginationDTO = new UrlPaginationDTO(newPage, newPageSize, urls);
+        UrlPaginationDTO urlPaginationDTO = new UrlPaginationDTO(newPage, newPageSize, urls, count);
 
         return new ResponseEntity<UrlPaginationDTO>(urlPaginationDTO, HttpStatus.OK);
 

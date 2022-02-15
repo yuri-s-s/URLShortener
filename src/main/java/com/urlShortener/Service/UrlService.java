@@ -52,6 +52,11 @@ public class UrlService implements IUrlService {
     }
 
     @Override
+    public long countAll() {
+        return urlRepository.count();
+    }
+
+    @Override
     public List<UrlResponseDTO> findAllPaginated(int page, int pageSize, String sort, String order) {
 
         Sort s;
@@ -91,6 +96,11 @@ public class UrlService implements IUrlService {
         }
 
         return urlsDTO;
+    }
+
+    @Override
+    public long countAllByUser(long userId) {
+        return urlRepository.countAllByUser(userId);
     }
 
     @Override

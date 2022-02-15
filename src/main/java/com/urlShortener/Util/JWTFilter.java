@@ -70,14 +70,21 @@ public class JWTFilter extends OncePerRequestFilter {
 
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                 }
+
             }
 
             filterChain.doFilter(httpServletRequest, httpServletResponse);
 
-        } catch (ExpiredJwtException e) {
+        }
+        catch (ExpiredJwtException e) {
+            String path = httpServletRequest.getRequestURI();
 
-            JWTError(httpServletResponse, HttpStatus.UNAUTHORIZED, "Expired token!");
+            if(!path.equals("/api/authenticate")) {
+                JWTError(httpServletResponse, HttpStatus.UNAUTHORIZED, "Expired token!");
 
+            }else{
+                filterChain.doFilter(httpServletRequest, httpServletResponse);
+            }
         }
         catch (SignatureException e) {
 
