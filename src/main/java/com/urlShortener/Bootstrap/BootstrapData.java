@@ -39,13 +39,25 @@ public class BootstrapData implements CommandLineRunner {
         Role admin = new Role("ROLE_ADMIN");
 
 
+        Role rUser = roleRepository.getByName(user.getName());
+        Role rAdmin = roleRepository.getByName(admin.getName());
+
+        if(rUser == null) {
+            roleRepository.save(user);
+        }
+
+        if(rAdmin == null) {
+            roleRepository.save(admin);
+        }
+
         User u1 = new User("Yuri", "yuri.souza@email.com", passwordEncoder(password));
 
-        roleRepository.saveAll(List.of(user, admin));
+        User checkUserExists = userRepository.getByEmail(u1.getEmail());
 
-        u1.addRole(admin);
-
-        userRepository.save(u1);
-
+        if (checkUserExists == null){
+            Role r = roleRepository.getByName(admin.getName());
+            u1.addRole(r);
+            userRepository.save(u1);
+        }
     }
 }

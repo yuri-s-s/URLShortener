@@ -52,7 +52,7 @@ public class ShortUrlController {
             throw new BaseNotFoundException("Url not found!");
         }
 
-        return new ResponseEntity<UrlStatisticsDTO>(url, HttpStatus.SEE_OTHER);
+        return new ResponseEntity<UrlStatisticsDTO>(url, HttpStatus.OK);
     }
 
 }
