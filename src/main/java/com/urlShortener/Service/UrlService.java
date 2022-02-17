@@ -4,6 +4,7 @@ import com.urlShortener.DTO.ClickDTO.ClickDTO;
 import com.urlShortener.DTO.UrlDTO.UrlRequestDTO;
 import com.urlShortener.DTO.UrlDTO.UrlResponseDTO;
 import com.urlShortener.DTO.UrlDTO.UrlStatisticsDTO;
+import com.urlShortener.Exception.UserException.UserCreateException;
 import com.urlShortener.Model.Url;
 import com.urlShortener.Model.User;
 import com.urlShortener.Repository.UrlRepository;
@@ -129,6 +130,15 @@ public class UrlService implements IUrlService {
     @Override
     public UrlResponseDTO create(UrlRequestDTO url, User user) {
 
+        String originalUrl = url.getOriginalUrl();
+
+        Url urlExists = this.getUrlWithUserByOriginalUrl(originalUrl, user.getId());
+
+        if(urlExists != null){
+            UrlResponseDTO urlResponse = new UrlResponseDTO(urlExists.getOriginalUrl(), baseUrl + urlExists.getShortenedUrl());
+            return urlResponse;
+        }
+
         String date = Long.toString(new Date().getTime());
 
         Url newUrl = new Url(url.getOriginalUrl(), date);
@@ -143,7 +153,7 @@ public class UrlService implements IUrlService {
     }
 
     @Override
-    public List<Url> getUrlWithUserByOriginalUrl(String originalUrl, long userId) {
+    public Url getUrlWithUserByOriginalUrl(String originalUrl, long userId) {
         return urlRepository.getUrlWithUserByOriginalUrl(originalUrl, userId);
     }
 

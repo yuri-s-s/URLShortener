@@ -16,7 +16,11 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,6 +46,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @ApiOperation(value = "This method returns a list of users")
     @RequestMapping(produces = "application/json", value = "/user", method = RequestMethod.GET)
@@ -143,6 +150,39 @@ public class UserController {
         return new ResponseEntity<UserDTO>(newUser, HttpStatus.CREATED);
 
     }
+
+    @ApiOperation(value = "This method updates a user")
+    @RequestMapping(produces = "application/json", value = "/user/{id}/changePassword", method = RequestMethod.PUT)
+    public @ResponseBody
+    ResponseEntity<UserDTO> updatePassword(@PathVariable long id, @RequestBody UserEditPasswordDTO user) throws UserCreateException {
+
+        userValidation.validationEditPassword(user);
+
+        User checkUser = userValidation.UserExists(id);
+
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            checkUser.getEmail(),
+                            user.getPassword()
+                    )
+            );
+
+        } catch (BadCredentialsException e) {
+            throw new UsernameNotFoundException(e.getMessage());
+        }
+
+        UserDTO newUser = iUserService.updatePassword(id, user);
+
+        if (newUser == null){
+
+            throw new BaseNotFoundException("User not found!");
+        }
+
+        return new ResponseEntity<UserDTO>(newUser, HttpStatus.CREATED);
+
+    }
+
 
     @ApiOperation(value = "This method remove a user")
     @RequestMapping(produces = "application/json", value = "/user/{id}", method = RequestMethod.DELETE)

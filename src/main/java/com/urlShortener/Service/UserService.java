@@ -3,6 +3,7 @@ package com.urlShortener.Service;
 import com.urlShortener.DTO.RoleDTO.RoleDTO;
 import com.urlShortener.DTO.UserDTO.UserDTO;
 import com.urlShortener.DTO.UserDTO.UserEditDTO;
+import com.urlShortener.DTO.UserDTO.UserEditPasswordDTO;
 import com.urlShortener.DTO.UserDTO.UserRoleDTO;
 import com.urlShortener.Exception.UserException.UserRoleAlreadyExistsException;
 import com.urlShortener.Model.Role;
@@ -106,6 +107,23 @@ public class UserService implements IUserService, UserDetailsService {
         if (userEditDTO.getName() != null) {
             user.setName(userEditDTO.getName());
         }
+        userRepository.save(user);
+
+        UserDTO userDTO = new UserDTO(user.getId(), user.getName(), user.getEmail());
+
+        return userDTO;
+    }
+
+    @Override
+    public UserDTO updatePassword(long id, UserEditPasswordDTO userEditDTO) {
+        User user = userRepository.getById(id);
+
+        if (user == null) {
+            return null;
+        }
+
+        user.setPassword(passwordEncoder(userEditDTO.getNewPassword()));
+
         userRepository.save(user);
 
         UserDTO userDTO = new UserDTO(user.getId(), user.getName(), user.getEmail());
@@ -232,6 +250,5 @@ public class UserService implements IUserService, UserDetailsService {
         }
         return user;
     }
-
 
 }

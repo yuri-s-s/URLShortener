@@ -22,11 +22,6 @@ public class UrlValidation {
         if (originalUrl == null) {
             throw new UserCreateException("OriginalUrl is required!");
         }
-        List<Url> url = iUrlService.getUrlWithUserByOriginalUrl(originalUrl, userId);
-
-        if(!url.isEmpty()){
-            throw new UserCreateException("Email already exists!");
-        }
 
     }
 }

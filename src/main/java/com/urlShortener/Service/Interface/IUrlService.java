@@ -24,7 +24,7 @@ public interface IUrlService {
 
     UrlResponseDTO create(UrlRequestDTO url, User user);
 
-    List<Url> getUrlWithUserByOriginalUrl(String originalUrl, long userId);
+    Url getUrlWithUserByOriginalUrl(String originalUrl, long userId);
 
     UrlResponseDTO findByShortenedUrl(String shortenedUrl);
 

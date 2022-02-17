@@ -12,8 +12,8 @@ import java.util.List;
 @Repository
 public interface UrlRepository extends JpaRepository<Url, Long> {
 
-    @Query(value = "SELECT * FROM urls r Where r.original_url = :originalUrl and r.user_id = :userId", nativeQuery = true)
-    public List<Url> getUrlWithUserByOriginalUrl(String originalUrl, long userId);
+    @Query(value = "SELECT * FROM urls r Where r.original_url = :originalUrl and r.user_id = :userId LIMIT 1", nativeQuery = true)
+    public Url getUrlWithUserByOriginalUrl(String originalUrl, long userId);
 
     @Query(value = "SELECT * FROM urls r", nativeQuery = true)
     public List<Url> findAllPaginated(Pageable pageable);
