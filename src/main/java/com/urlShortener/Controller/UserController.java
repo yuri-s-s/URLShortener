@@ -112,7 +112,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "This method creates a new user")
-    @RequestMapping(produces = "application/json", value = "/user", method = RequestMethod.POST)
+    @RequestMapping(produces = "application/json", value = "/register", method = RequestMethod.POST)
     public @ResponseBody
     ResponseEntity<UserAuthenticateDTO> create(@RequestBody User user) throws UserCreateException {
 
