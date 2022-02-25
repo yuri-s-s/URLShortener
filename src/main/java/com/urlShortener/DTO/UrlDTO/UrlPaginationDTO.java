@@ -8,7 +8,7 @@ public class UrlPaginationDTO {
     private Integer page;
     private Integer pageSize;
     private int elements;
-    private long pages;
+    private Long pages;
 
     private List<UrlResponseDTO> urls;
 
@@ -17,7 +17,7 @@ public class UrlPaginationDTO {
         this.pageSize = pageSize;
         this.urls = urls;
         this.elements = urls.size();
-        this.pages = (long) Math.ceil((double) count / this.pageSize);
+        this.pages = this.pageSize != null ? (long) Math.ceil((double) count / this.pageSize): null;
 
     }
 
@@ -56,11 +56,11 @@ public class UrlPaginationDTO {
         this.elements = elements;
     }
 
-    public long getPages() {
+    public Long getPages() {
         return pages;
     }
 
-    public void setPages(int count) {
-        this.pages = count / this.pageSize;
+    public void setPages(long count) {
+        this.pages = this.pageSize != null ? count / this.pageSize : null;
     }
 }

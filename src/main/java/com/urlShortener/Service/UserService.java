@@ -82,6 +82,11 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
+    public long countAll() {
+        return userRepository.count();
+    }
+
+    @Override
     public UserDTO findById(long id) {
 
         User u = userRepository.getById(id);

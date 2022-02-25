@@ -63,15 +63,18 @@ public class UserController {
         Integer newPage = page != null ? Integer.valueOf(page) : null;
         Integer newPageSize = page != null ? Integer.valueOf(pageSize) : null;
 
+        long count;
+
         if (page != null && pageSize != null) {
 
             users = iUserService.findAllPaginated(newPage, newPageSize, newSort, newOrder);
-
+            count = iUserService.countAll();
         } else {
             users = iUserService.findAll(newSort, newOrder);
+            count = users.size();
         }
 
-        UserPaginationDTO userPaginationDTO = new UserPaginationDTO(newPage, newPageSize, users);
+        UserPaginationDTO userPaginationDTO = new UserPaginationDTO(newPage, newPageSize, users, count);
 
         return new ResponseEntity<UserPaginationDTO>(userPaginationDTO, HttpStatus.OK);
 

@@ -14,6 +14,8 @@ public interface IUserService {
 
     List<UserDTO> findAllPaginated(int page, int pageSize, String sort, String order);
 
+    long countAll();
+
     UserDTO findById(long id);
 
     UserDTO update(long id, UserEditDTO userEditDTO);
