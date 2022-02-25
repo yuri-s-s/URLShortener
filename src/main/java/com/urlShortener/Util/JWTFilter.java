@@ -78,7 +78,6 @@ public class JWTFilter extends OncePerRequestFilter {
         }
         catch (ExpiredJwtException e) {
             String path = httpServletRequest.getRequestURI();
-            System.out.println(path);
 
             if(!path.equals("/api/authenticate") && !path.equals("/api/register")) {
                 JWTError(httpServletResponse, HttpStatus.UNAUTHORIZED, "Expired token!");
@@ -89,7 +88,7 @@ public class JWTFilter extends OncePerRequestFilter {
         }
         catch (SignatureException e) {
             String path = httpServletRequest.getRequestURI();
-            System.out.println(path);
+
             if(!path.equals("/api/authenticate") && !path.equals("/api/register")) {
 
                 JWTError(httpServletResponse, HttpStatus.UNAUTHORIZED, "Signature exception!");
